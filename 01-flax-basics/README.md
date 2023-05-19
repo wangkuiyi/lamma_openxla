@@ -16,5 +16,5 @@ The following commands install dependencies and run the example:
 
 ```bash
 python3 -m pip install --upgrade -r requirements.txt
-python3 01-tutorial.py
+python3 01-tutorial/01-tutorial.py
 ```
