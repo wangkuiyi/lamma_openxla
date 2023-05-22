@@ -16,7 +16,7 @@ INPUT_SHAPE = (1, 4)
 OUTPUT_SHAPE = (1, 1)
 
 
-class MyModel(flax.linen.Module):
+class _SumUpInputVector(flax.linen.Module):
     @flax.linen.compact
     def __call__(self, x):
         x = flax.linen.Dense(features=1, use_bias=False)(x)
@@ -30,7 +30,7 @@ ModelState = Union[FrozenVariableDict, Dict[str, Any]]
 
 
 def model(rng) -> Tuple[ModelState, Callable]:
-    model = MyModel()
+    model = _SumUpInputVector()
     example_input = jnp.ones(INPUT_SHAPE)
     model_params = model.init(rng, example_input)
     return (model_params, model.apply)

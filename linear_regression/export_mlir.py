@@ -10,7 +10,7 @@ from iree.jax import Program, store_global
 FLAGS = absl.flags.FLAGS
 
 
-def create_linear_regression_mlir():
+def _create_mlir():
     input_type = jax.core.ShapedArray(linear_regression.INPUT_SHAPE, dtype=jnp.float32)
     output_type = jax.core.ShapedArray(
         linear_regression.OUTPUT_SHAPE, dtype=jnp.float32
@@ -19,7 +19,8 @@ def create_linear_regression_mlir():
     rng = jax.random.PRNGKey(0)
     model_params, opt_states, forward, step, rng = linear_regression.init_training(rng)
 
-    class LinearRegressionMLIR(Program):
+    # The generated MLIR module name will be the prefix before Program.
+    class LinearRegressionProgram(Program):
         _model_params = Program.export_global(
             model_params, initialize=True, mutable=True
         )
@@ -43,14 +44,17 @@ def create_linear_regression_mlir():
             store_global(self._model_params, new_model_params)
             store_global(self._opt_states, new_opt_states)
 
-    return LinearRegressionMLIR
+        def get_params(self):
+            return self._model_params
+
+    return LinearRegressionProgram
 
 
-absl.flags.DEFINE_string("ir_path", "/tmp/lr.mlir", "The output MLIR file")
+absl.flags.DEFINE_string("ir_path", "./lr.mlir", "The output MLIR file")
 
 
 def main(argv):
-    mlir_module = create_linear_regression_mlir()
+    mlir_module = _create_mlir()
 
     with open(FLAGS.ir_path, "w") as f:
         f.write(str(Program.get_mlir_module(mlir_module)))

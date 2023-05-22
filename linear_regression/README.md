@@ -56,6 +56,6 @@ iree-compile \
  --iree-input-type=mhlo \
  --iree-hal-target-backends=metal \
  --iree-metal-compile-to-metallib=false \
- /tmp/lr.mlir \
- -o /tmp/lr-metal.vmfb
+ ./lr.mlir \
+ -o ./lr-metal.vmfb
 ```

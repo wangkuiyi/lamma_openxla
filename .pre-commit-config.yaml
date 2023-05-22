@@ -1,5 +1,11 @@
 ---
+fail_fast: false
 repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.4.0
+      hooks:
+          - id: trailing-whitespace
+          - id: end-of-file-fixer
     - repo: https://github.com/executablebooks/mdformat
       rev: 0.7.16
       hooks:
@@ -27,3 +33,14 @@ repos:
       rev: 23.3.0
       hooks:
           - id: black
+    - repo: https://github.com/pocc/pre-commit-hooks
+      rev: v1.3.5
+      hooks:
+          - id: clang-format
+            args: [--style=Google]
+          # - id: clang-tidy # No easy way to install clang-tidy on macOS
+          # - id: oclint # oclint uses dylds that were not verified by macOS
+          # - id: uncrustify # seems conflicts with clang-format
+          - id: cppcheck
+          - id: cpplint
+          # - id: include-what-you-use # Cannot handle including files from external frameworks
