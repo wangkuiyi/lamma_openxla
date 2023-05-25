@@ -25,4 +25,4 @@ jobs:
                   black $(git ls-files '*.py')
             - name: Static analysing the code with mypy
               run: |
-                  mypy $(git ls-files '*.py')
+                  mypy --ignore-missing-imports $(git ls-files '*.py')
