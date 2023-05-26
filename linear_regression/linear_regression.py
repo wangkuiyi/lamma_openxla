@@ -1,5 +1,4 @@
-"""Define a linear regression model that sums up elements in the input vector."""
-import inspect
+"""Define a linear regression model."""
 import absl  # type: ignore
 import jax
 import jax.numpy as jnp
@@ -7,6 +6,11 @@ import optax  # type: ignore
 import flax
 from typing import Tuple, Callable, Dict, Any, Union
 from tqdm import tqdm  # type: ignore
+
+# The return type of flax.linen.Module.init()
+# https://tinyurl.com/2p87bvt6
+from flax.core.scope import FrozenVariableDict
+
 
 FLAGS = absl.flags.FLAGS
 
@@ -22,9 +26,6 @@ class _SumUpInputVector(flax.linen.Module):
         x = flax.linen.Dense(features=1, use_bias=False)(x)
         return x
 
-
-# The return type of flax.linen.Module.init() https://github.com/google/flax/blob/380fef6db994b55f217df9421924a667fc829d56/flax/linen/module.py#LL1559C25-L1559C67
-from flax.core.scope import FrozenVariableDict
 
 ModelState = Union[FrozenVariableDict, Dict[str, Any]]
 
