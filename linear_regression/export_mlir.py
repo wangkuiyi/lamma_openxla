@@ -11,20 +11,30 @@ FLAGS = absl.flags.FLAGS
 
 
 def _create_mlir():
-    input_type = jax.core.ShapedArray(linear_regression.INPUT_SHAPE, dtype=jnp.float32)
+    input_type = jax.core.ShapedArray(
+        linear_regression.INPUT_SHAPE, dtype=jnp.float32
+    )
     output_type = jax.core.ShapedArray(
         linear_regression.OUTPUT_SHAPE, dtype=jnp.float32
     )
 
     rng = jax.random.PRNGKey(0)
-    model_params, opt_states, forward, step, rng = linear_regression.init_training(rng)
+    (
+        model_params,
+        opt_states,
+        forward,
+        step,
+        rng,
+    ) = linear_regression.init_training(rng)
 
     # The generated MLIR module name will be the prefix before Program.
     class LinearRegressionProgram(Program):
         _model_params = Program.export_global(
             model_params, initialize=True, mutable=True
         )
-        _opt_states = Program.export_global(opt_states, initialize=True, mutable=True)
+        _opt_states = Program.export_global(
+            opt_states, initialize=True, mutable=True
+        )
 
         @Program.kernel
         def _predict(model_params, x):
