@@ -16,16 +16,26 @@ cd ~/work
 git clone git@hf.co:openlm-research/open_llama_7b_700bt_preview_easylm
 ```
 
-Run the following command to load the **3B** checkpoint and generates the MLIR bytecode file `./llama3b-metal.mlir`.
+Run the following command to load the **3B** checkpoint and generates the MLIR bytecode file `./llama3b.mlir`.
 
 ```bash
 cd flaxiree/llama
 python3 export_llama
 ```
 
-Run the following command to load the **7B** checkpoint and generates the MLIR bytecode file `./llama7b-metal.mlir`.
+Run the following command to load the **7B** checkpoint and generates the MLIR bytecode file `./llama7b.mlir`.
 
 ```bash
 cd flaxiree/llama
 python3 export_llama --config=7b
+```
+
+The following command compiles the MLIR/MHLO file into CUDA native code.
+
+```
+iree-compile \
+ --iree-input-type=auto \
+ --iree-hal-target-backends=cuda \
+ ./llama3b.mlir \
+ -o ./llama3b-cuda.vmfb
 ```
