@@ -102,7 +102,7 @@ def _create_program():
 
 
 def main(argv):
-    with open("./llama" + FLAGS.config + "-metal.mlir", "wb") as f:
+    with open("./llama" + FLAGS.config + ".mlir", "wb") as f:
         Program.get_mlir_module(_create_program()).operation.write_bytecode(f)
 
 
